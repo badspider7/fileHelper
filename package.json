@@ -24,15 +24,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@morev/vue-transitions": "^2.3.6",
+    "@vicons/fluent": "^0.12.0",
     "axios": "^1.6.2",
     "pinia": "^2.1.7",
+    "sudo-prompt": "^9.2.1",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^4.3.3",
     "electron": "^26.0.0",
     "electron-builder": "^24.6.3",
     "naive-ui": "^2.35.0",
+    "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "tree-kill": "^1.2.2",
     "typescript": "^5.1.6",
