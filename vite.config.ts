@@ -1,10 +1,14 @@
 import { rmSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from "node:path";
 import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import { notBundle } from 'vite-plugin-electron/plugin'
 import pkg from './package.json'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from "unplugin-vue-components/resolvers"
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -15,8 +19,25 @@ export default defineConfig(({ command }) => {
   const sourcemap = isServe || !!process.env.VSCODE_DEBUG
 
   return {
+    resolve: {
+			alias: {
+				"@": path.resolve(__dirname, "src"),
+				"@@": path.resolve(__dirname, "electron")
+			}
+		},
     plugins: [
       vue(),
+      AutoImport({
+				imports: [
+					"vue",
+					{
+						"naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
+					}
+				]
+			}),
+			Components({
+				resolvers: [NaiveUiResolver()]
+			}),
       electron([
         {
           // Main process entry file of the Electron App.
