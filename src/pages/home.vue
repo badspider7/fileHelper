@@ -1,4 +1,6 @@
-<template>home</template>
+<template>
+	<div class="index">home</div>
+</template>
 
 <script lang="ts" setup>
 //修改标题

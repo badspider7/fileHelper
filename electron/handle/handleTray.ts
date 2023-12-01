@@ -13,9 +13,10 @@ export function setupTray(): void {
             }
         },
         {
-            label: "隐藏所有窗口",
+            label: "设置",
             click: () => {
-                console.log('hidden all windows')
+
+                showMainWindow({ name: 'setting' })
             }
         },
         {

@@ -26,11 +26,12 @@ import { TransitionSlide } from "@morev/vue-transitions";
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	display: grid;
-	grid-template-rows: 1fr 15fr;
+	display: flex;
+	flex-direction: column;
 	.container {
 		display: grid;
 		grid-template-columns: 3fr 7fr;
+		flex: 1;
 	}
 }
 </style>

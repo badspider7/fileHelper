@@ -8,6 +8,7 @@ export function showMainWindow(route?: string | { name: string }) {
     if (windows.length) {
         const win = windows.at(0);
         if (route) {
+            console.log('jump', route)
             win.webContents.send("jumpRoute", route);
         }
         //win.restore();

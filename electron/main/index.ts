@@ -62,7 +62,7 @@ async function createWindow() {
 
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
   } else {
     win.loadFile(indexHtml)
   }
@@ -71,6 +71,8 @@ async function createWindow() {
   //在加载页面时，渲染进程第一次完成绘制时，如果窗口还没有被显示，渲染进程会发出 ready-to-show 事件 。 在此事件后显示窗口将没有视觉闪烁：
   win.once("ready-to-show", () => {
     win.show();
+    //限制窗口的最小化尺寸
+    win.setMinimumSize(800, 600)
   });
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
