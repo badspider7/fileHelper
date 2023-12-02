@@ -47,8 +47,8 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 800,
+    height: 600,
     title: '首页',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {

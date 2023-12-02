@@ -6,6 +6,6 @@
 <style lang="scss" scoped>
 .slider_bar {
 	height: 100%;
-	background-color: #ccc;
+	// background-color: #ccc;
 }
 </style>

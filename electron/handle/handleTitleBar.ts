@@ -8,8 +8,10 @@ export function setupTitleBarHandler(win: BrowserWindow) {
     ipcMain.handle("titleBarControl:maximizeOrUnmaximize", () => {
         if (!win.isMaximized()) {
             win.maximize();
+            return true;
         } else {
             win.unmaximize();
+            return false
         }
     });
     ipcMain.handle("titleBarControl:close", (event, type: string) => {

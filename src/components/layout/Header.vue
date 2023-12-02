@@ -5,13 +5,13 @@
 				<img src="/logo.svg" alt="" />
 			</div>
 			<div class="username">{{ username }}</div>
-			<div class="pull_down">
+			<div class="pull_down" @click="showProfilePanel()">
 				<ChevronUpDown20Regular />
 			</div>
 		</div>
 		<div class="middle">
 			<div class="search">
-				<n-input clearable v-model:value="value" type="text" placeholder="搜索(ctrl+k)" />
+				<n-input clearable v-model:value="value" type="text" placeholder="搜索项目(ctrl+k)" />
 			</div>
 		</div>
 		<div class="right">
@@ -20,30 +20,71 @@
 					<Subtract16Regular />
 				</div>
 				<div id="maxMize" @click="maxmizeHandler">
-					<Maximize16Regular />
+					<Maximize16Regular v-if="!isMaxmize" />
+					<CopySelect20Regular v-else />
 				</div>
 				<div id="close" @click="closeHandler">
 					<Dismiss16Regular />
 				</div>
 			</div>
 		</div>
+		<ProfilePanel :isShowPanel="isShowPanel" v-show="isShowPanel" @emitShowPanel="showProfilePanel" />
 	</div>
 </template>
 
 <script setup lang="ts">
-import { Dismiss16Regular, Maximize16Regular, Subtract16Regular, ChevronUpDown20Regular } from "@vicons/fluent";
+import {
+	Dismiss16Regular,
+	Maximize16Regular,
+	Subtract16Regular,
+	ChevronUpDown20Regular,
+	CopySelect20Regular
+} from "@vicons/fluent";
+import ProfilePanel from "../ProfilePanel.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 //右上角操作
+let isMaxmize = ref(false);
 const minimizeHandler = () => {
 	window.ipcRenderer.invoke("titleBarControl:minimize");
 };
-const maxmizeHandler = () => {
-	window.ipcRenderer.invoke("titleBarControl:maximizeOrUnmaximize");
+const maxmizeHandler = async () => {
+	isMaxmize.value = await window.ipcRenderer.invoke("titleBarControl:maximizeOrUnmaximize");
 };
 const closeHandler = () => {
-	window.ipcRenderer.invoke("titleBarControl:close");
+	window.ipcRenderer.invoke("titleBarControl:close", "hide");
 };
+
+//个人资料面板 bug 用节流函数
+let isShowPanel = ref(false);
+const throttle = (func: Function, delay: number) => {
+	let lastTime = 0;
+	return function () {
+		const now = Date.now();
+		if (now - lastTime > delay) {
+			lastTime = now;
+			return func();
+		}
+	};
+};
+
+const showProfilePanel = throttle(() => {
+	isShowPanel.value = !isShowPanel.value;
+}, 500);
+// type: 0/1 0--自己触发   1-- 子组件触发
+// const showProfilePanel = (type: number) => {
+// 	let x = throttle(() => {
+// 		console.log("11111");
+// 		isShowPanel.value = !isShowPanel.value;
+// 	}, 1000);
+// 	x();
+// 	// if (type == 0) {
+// 	// 	isShowPanel.value = !isShowPanel.value;
+// 	// 	console.log("isShowPanel.value", isShowPanel.value);
+// 	// } else {
+// 	// 	isShowPanel.value = false;
+// 	// }
+// };
 
 const value: string | null = ref(null);
 const username: string = ref("badspider");
@@ -63,7 +104,8 @@ const goHome = () => {
 	height: 40px;
 	-webkit-user-select: none; //文本不可选中
 	-webkit-app-region: drag; //设置为可拖拽
-	background-color: rgb(110, 180, 109);
+	// background-color: rgb(110, 180, 109);
+	background-image: radial-gradient(circle at 100%, transparent 0%, #d9b3ff 30%, transparent 100%);
 	.left {
 		display: flex;
 		justify-content: center;
@@ -71,12 +113,6 @@ const goHome = () => {
 		-webkit-app-region: no-drag;
 		border-radius: 5px;
 		padding: 2px 15px;
-		&:hover {
-			background-color: #e3e1e1;
-			border-radius: 5px;
-			padding: 2px 15px;
-			cursor: pointer;
-		}
 		.icon {
 			width: 40px;
 			height: 40px;
@@ -89,11 +125,20 @@ const goHome = () => {
 			margin: 0 30px 0 10px;
 		}
 		.pull_down {
-			height: 20px;
+			height: 30px;
+			width: 30px;
+			border-radius: 5px;
 			cursor: pointer;
+
 			svg {
 				height: 100%;
 				width: 20px;
+				&:hover {
+					animation: rotateIcon 1s ease-in-out 0.1s;
+				}
+			}
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.45);
 			}
 		}
 	}
@@ -148,6 +193,15 @@ const goHome = () => {
 		#close:hover {
 			background-color: rgba(255, 255, 255, 0.45);
 		}
+	}
+}
+
+@keyframes rotateIcon {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
 	}
 }
 </style>
