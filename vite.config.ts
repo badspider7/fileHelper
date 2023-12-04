@@ -9,6 +9,8 @@ import pkg from './package.json'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from "unplugin-vue-components/resolvers"
+import svgLoader from 'vite-svg-loader';
+
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -20,24 +22,24 @@ export default defineConfig(({ command }) => {
 
   return {
     resolve: {
-			alias: {
-				"@": path.resolve(__dirname, "src"),
-				"@@": path.resolve(__dirname, "electron")
-			}
-		},
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+        "@@": path.resolve(__dirname, "electron")
+      }
+    },
     plugins: [
       vue(),
       AutoImport({
-				imports: [
-					"vue",
-					{
-						"naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
-					}
-				]
-			}),
-			Components({
-				resolvers: [NaiveUiResolver()]
-			}),
+        imports: [
+          "vue",
+          {
+            "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
+          }
+        ]
+      }),
+      Components({
+        resolvers: [NaiveUiResolver()]
+      }),
       electron([
         {
           // Main process entry file of the Electron App.
@@ -93,6 +95,29 @@ export default defineConfig(({ command }) => {
       ]),
       // Use Node.js API in the Renderer process
       renderer(),
+      svgLoader(({
+        svgoConfig: {
+          // plugins: [
+          //   {
+          //     name: 'cleanupIDs',
+          //     params: {
+          //       prefix: {
+          //         // 避免不同 svg 内部的 filter id 相同导致样式错乱
+          //         // https://github.com/svg/svgo/issues/674#issuecomment-328774019
+          //         toString() {
+          //           let count: number = this.count ?? 0;
+          //           count++;
+          //           this.count = count;
+          //           return `svg-random-${count.toString(
+          //             36,
+          //           )}-`;
+          //         },
+          //       } as string,
+          //     }
+          //   }
+          // ]
+        }
+      })),
     ],
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)

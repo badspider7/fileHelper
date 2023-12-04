@@ -1,7 +1,9 @@
 <template>
 	<div class="index">
-		<div class="container" v-if="fileList.length !== 0"></div>
-		<n-empty description="一个文件都没有" v-else>
+		<div class="container">
+			<SvgIcon name="folder"></SvgIcon>
+		</div>
+		<n-empty description="一个文件都没有">
 			<template #extra>
 				<n-button size="small" @click="openFileExplorer">添加文件夹</n-button>
 			</template>

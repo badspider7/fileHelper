@@ -6,8 +6,11 @@ import { createPinia } from 'pinia'
 import { setupListener } from "./listener/backgroundListener";
 import directives from './directives'
 import "@morev/vue-transitions/styles";
+import SvgIcon from './components/SvgIcon.vue'
 
 const app = createApp(App);
+
+app.component('SvgIcon', SvgIcon)
 const pinia = createPinia()
 setupListener()
 app.use(router)
