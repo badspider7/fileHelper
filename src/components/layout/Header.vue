@@ -45,15 +45,23 @@ import { useRouter } from "vue-router";
 import { ref } from "vue";
 const router = useRouter();
 //右上角操作
+const isWinMaxmize = () => {
+	window.ipcRenderer.on("window.maximize", (event, value) => {
+		isMaxmize.value = value;
+	});
+};
 let isMaxmize = ref(false);
 const minimizeHandler = () => {
 	window.ipcRenderer.invoke("titleBarControl:minimize");
+	isWinMaxmize();
 };
 const maxmizeHandler = async () => {
 	isMaxmize.value = await window.ipcRenderer.invoke("titleBarControl:maximizeOrUnmaximize");
+	isWinMaxmize();
 };
 const closeHandler = () => {
 	window.ipcRenderer.invoke("titleBarControl:close", "hide");
+	isWinMaxmize();
 };
 
 //个人资料面板 bug 用节流函数
@@ -114,6 +122,7 @@ const goHome = () => {
 		-webkit-app-region: no-drag;
 		border-radius: 5px;
 		padding: 2px 15px;
+		text-align: center;
 		.icon {
 			width: 40px;
 			height: 40px;

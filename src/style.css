@@ -39,7 +39,7 @@ body {
 #app {
   margin: 0;
   padding: 0;
-  text-align: center;
+  /* text-align: center; */
   height: 100%;
 }
 

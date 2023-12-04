@@ -23,3 +23,17 @@ export function setupTitleBarHandler(win: BrowserWindow) {
     });
 
 }
+
+//判断窗口是不是最大化
+export function isMaximized(win: BrowserWindow) {
+    //最大化
+    win.on('maximize', () => {
+        win.webContents.send('window.maximize', true)
+        console.log('最大化')
+    })
+    //退出最大化
+    win.on('unmaximize', () => {
+        win.webContents.send('window.maximize', false)
+        console.log('退出最大化')
+    })
+}

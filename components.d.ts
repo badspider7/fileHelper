@@ -17,6 +17,7 @@ declare module 'vue' {
     NEmpty: typeof import('naive-ui')['NEmpty']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
     NInput: typeof import('naive-ui')['NInput']
+    NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     ProfilePanel: typeof import('./src/components/ProfilePanel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
