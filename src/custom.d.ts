@@ -9,6 +9,7 @@ export interface IElectronAPI {
 declare global {
     interface Window {
         ipcRenderer: IpcRenderer;
+        renderApi: any
     }
 }
 

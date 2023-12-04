@@ -1,8 +1,9 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { setupTray } from '../handle/handleTray'
 import { setupTitleBarHandler } from '../handle/handleTitleBar'
+import { handleFileOpen } from '../handle/handleFileSystem'
 import child_process from "child_process";
 
 
@@ -47,8 +48,8 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     title: '首页',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
@@ -95,6 +96,7 @@ app.whenReady().then(() => {
     const win = BrowserWindow.fromWebContents(webContent);
     win.setTitle(title);
   })
+  ipcMain.handle('fileSystem:openFile', handleFileOpen)
 }
 )
 

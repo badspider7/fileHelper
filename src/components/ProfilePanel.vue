@@ -18,9 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, render } from "vue";
+import { onBeforeUnmount, ref, watch, h } from "vue";
 import { useRouter } from "vue-router";
+import { useMessage, useDialog } from "naive-ui";
+import AboutUs from "./AboutUs.vue";
 const message = useMessage();
+const dialog = useDialog();
 const router = useRouter();
 
 const props = defineProps({
@@ -85,8 +88,17 @@ const menu = [
 		key: "b"
 	},
 	{
-		label: "打开首页",
+		label: "关于我们",
 		key: "5",
+		props: {
+			onClick: () => {
+				handleAboutUs();
+			}
+		}
+	},
+	{
+		label: "打开首页",
+		key: "6",
 		props: {
 			onClick: () => {
 				router.push({ name: "index" });
@@ -95,7 +107,7 @@ const menu = [
 	},
 	{
 		label: "退出登录",
-		key: "6",
+		key: "7",
 		props: {
 			onClick: () => {
 				message.info("退出登录");
@@ -103,6 +115,16 @@ const menu = [
 		}
 	}
 ];
+
+//关于我们
+const handleAboutUs = () => {
+	dialog.success({
+		title: "关于我们",
+		content: () => h(AboutUs),
+		showIcon: false,
+		negativeText: "关闭"
+	});
+};
 
 //点击 select 选项触发
 const handleSelect = (key: string | number) => {

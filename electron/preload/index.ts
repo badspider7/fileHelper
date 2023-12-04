@@ -1,9 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
+//bad 
 contextBridge.exposeInMainWorld('ipcRenderer', withPrototype(ipcRenderer))
 contextBridge.exposeInMainWorld('renderApi', {
   setTitle: (title: string) => {
     ipcRenderer.send('set-title', title)
+  },
+  openFile: () => {
+    return ipcRenderer.invoke('fileSystem:openFile')
   }
 })
 

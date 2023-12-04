@@ -42,6 +42,7 @@ import {
 } from "@vicons/fluent";
 import ProfilePanel from "../ProfilePanel.vue";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 const router = useRouter();
 //右上角操作
 let isMaxmize = ref(false);
@@ -86,8 +87,8 @@ const showProfilePanel = throttle(() => {
 // 	// }
 // };
 
-const value: string | null = ref(null);
-const username: string = ref("badspider");
+const value = ref(null);
+const username = ref("badspider");
 
 //返回首页
 const goHome = () => {

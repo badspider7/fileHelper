@@ -8,5 +8,4 @@ export function setupListener() {
         console.log('render-process', args)
         void router.push(args[0] as string | { name: string });
     });
-
 }
