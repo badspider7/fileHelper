@@ -48,7 +48,7 @@ const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    width: 1000,
+    width: 1200,
     height: 800,
     title: '首页',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
@@ -75,7 +75,7 @@ async function createWindow() {
   win.once("ready-to-show", () => {
     win.show();
     //限制窗口的最小化尺寸
-    win.setMinimumSize(800, 600)
+    win.setMinimumSize(1000, 800)
   });
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
