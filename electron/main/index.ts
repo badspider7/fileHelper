@@ -1,10 +1,11 @@
-import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 import { setupTray } from '../handle/handleTray'
 import { setupTitleBarHandler, isMaximized } from '../handle/handleTitleBar'
-import { handleFileOpen } from '../handle/handleFileSystem'
+import { handleFileopen } from '../handle/handleFileSystem'
 import child_process from "child_process";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 
 process.env.DIST_ELECTRON = join(__dirname, '..')
@@ -14,6 +15,7 @@ process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
   : process.env.DIST
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
+const VUEJS3_DEVTOOLS = "nhdogjmejiglipccpnnnanhbledajbpd";
 
 export const isWin11 = child_process
   .execSync("wmic os get Caption /value")
@@ -93,12 +95,20 @@ async function createWindow() {
 app.whenReady().then(() => {
   createWindow()
   setupTray()
+  // Menu.setApplicationMenu(null);
   ipcMain.on('set-title', (event, title) => {
     const webContent = event.sender
     const win = BrowserWindow.fromWebContents(webContent);
     win.setTitle(title);
   })
-  ipcMain.handle('fileSystem:openFile', handleFileOpen)
+  ipcMain.handle('fileSystem:openFile', (event, type) => {
+    return handleFileopen(event, type)
+  })
+  if (process.env.VITE_DEV_SERVER_URL) {
+    installExtension(VUEJS3_DEVTOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log("An error occurred: ", err));
+  }
 }
 )
 

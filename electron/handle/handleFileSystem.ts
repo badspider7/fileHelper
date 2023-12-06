@@ -2,12 +2,26 @@ import { dialog } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
 
-//打开文件夹
-export async function handleFileOpen() {
-    const { canceled, filePaths } = await dialog.showOpenDialog({ defaultPath: '', title: '打开文件夹', properties: ['openDirectory', 'showHiddenFiles', 'promptToCreate'] })
-    if (!canceled) {
-        return getCurrentFilesInfo(filePaths[0]);
+//打开文件管理器
+/**
+ * 
+ * @param type  file | folder
+ * @returns FielInfo:Object
+ */
+export async function handleFileopen(event, type: 'file' | 'folder') {
+    // let openType = type == 'file' ? 'openFile' : 'openDirectory'
+    if (type == 'folder') {
+        const { canceled, filePaths } = await dialog.showOpenDialog({ defaultPath: '', title: '打开文件夹', properties: ['openDirectory', 'showHiddenFiles', 'promptToCreate'] })
+        if (!canceled) {
+            return getCurrentFilesInfo(filePaths[0]);
+        }
+    } else {
+        const { canceled, filePaths } = await dialog.showOpenDialog({ defaultPath: '', title: '打开文件夹', properties: ['openFile', 'showHiddenFiles', 'promptToCreate'] })
+        if (!canceled) {
+            return getCurrentFilesInfo(filePaths[0]);
+        }
     }
+
 }
 
 //判断文件是否存在
@@ -110,11 +124,3 @@ export function getCurrentFilesInfo(dirPath: string) {
         console.log(error)
     }
 }
-
-// const folderPath = '123123';
-// const itemsInfo = getAllFilesInfo(folderPath);
-// const itemsInfo = getCurrentFilesInfo('D:\\comProject\\BI')
-// console.log(itemsInfo);
-
-//输出
-

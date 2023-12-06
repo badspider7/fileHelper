@@ -6,8 +6,8 @@ contextBridge.exposeInMainWorld('renderApi', {
   setTitle: (title: string) => {
     ipcRenderer.send('set-title', title)
   },
-  openFile: () => {
-    return ipcRenderer.invoke('fileSystem:openFile')
+  openFile: (type) => {
+    return ipcRenderer.invoke('fileSystem:openFile', type)
   }
 })
 

@@ -14,13 +14,15 @@
 import { h, defineComponent, ref, nextTick, reactive } from "vue";
 import type { DataTableRowKey } from "naive-ui";
 import { NInput } from "naive-ui";
+import ColumnF from "./component/columnFolder.vue";
+import customHeaderCell from "./component/customHeaderCell.vue";
 const props = defineProps(["fileList"]);
-
+const emit = defineEmits(["sortFileInfo"]);
 //编辑备注
 const ShowOrEdit = defineComponent({
 	props: {
 		value: [String, Number],
-		onUpdateValue: [Function, Array]
+		onUpdateValue: [Function, Array<string>]
 	},
 	setup(props) {
 		const isEdit = ref(false);
@@ -67,20 +69,26 @@ type RowData = {
 	size: string;
 	category: string;
 	lastModify: string;
+	Directory: string;
 };
-
 //表头
 const columns = [
 	{
 		type: "selection"
 	},
 	{
+		//排序功能，把文件夹放在一起或者把文件放在一起
 		key: "folderName",
-		ellipsis: {
-			tooltip: true
-		},
 		title() {
-			return h("div", { size: "20", type: "info" }, { default: () => "文件名" });
+			return h(customHeaderCell, {
+				onEmitSort() {
+					console.log(222);
+					emit("sortFileInfo");
+				}
+			});
+		},
+		render: (item) => {
+			return h(ColumnF, { folderName: item.folderName, category: item.category });
 		},
 		width: 200
 	},
@@ -115,6 +123,9 @@ const columns = [
 		key: "category",
 		title() {
 			return h("div", { size: "20", type: "info" }, { default: () => "类型" });
+		},
+		render: (item) => {
+			return h("span", item.Directory == "文件夹" ? "文件夹" : item.category);
 		},
 		ellipsis: {
 			tooltip: true
