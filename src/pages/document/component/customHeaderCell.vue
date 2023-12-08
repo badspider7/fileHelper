@@ -26,8 +26,7 @@ const activeArrow = ref(null);
  */
 const sortDocument = (type) => {
 	activeArrow.value = type;
-	emit("EmitSort");
-	console.log("1111");
+	emit("EmitSort", type);
 };
 </script>
 <style lang="scss" scoped>

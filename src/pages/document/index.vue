@@ -30,15 +30,16 @@
 			</div> -->
 		</div>
 		<div class="container">
-			<FileTable :file-list="fileList" @sortFileInfo="sort"></FileTable>
+			<FileTable :file-list="fileList" v-if="flag" @sortFileInfo="sort"></FileTable>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { FolderAdd28Regular, DocumentAdd24Regular } from "@vicons/fluent";
-import { reactive, ref } from "vue";
+import { reactive, ref, onBeforeMount, watch } from "vue";
 import FileTable from "./Table.vue";
+import fileApi from "../../api/fileApi";
 
 interface FileListType {
 	key: number;
@@ -48,7 +49,13 @@ interface FileListType {
 	category: string;
 	lastModify: string;
 }
-
+let fileList: any = ref([]);
+let flag = ref(false);
+onBeforeMount(async () => {
+	const list = await fileApi.getAllFiles({ start: 0, size: 50 });
+	flag.value = true;
+	fileList.value = list;
+});
 //标准时间格式化
 const newDate = (time: string) => {
 	let date = new Date(time);
@@ -79,9 +86,8 @@ const formatSize = (fileSizeInBytes) => {
 // const switchTab = (type: string) => {
 // 	activeTab.value = type;
 // };
-let fileList: any = reactive([]);
+
 //判断文件类型
-// const fileCategory = ["js", "ppt", "word", "excel", "txt"];
 const fileCategory = [
 	{
 		suffix: ".js",
@@ -142,8 +148,7 @@ const openFileExplorer = async (type: string) => {
 	if (fileInfo) {
 		iconName.value = "";
 		judgeFileCate(fileInfo);
-		fileList.push({
-			key: 0,
+		fileApi.addFile({
 			folderName: fileInfo.name,
 			remarks: "",
 			size: fileInfo.isDirectory ? "-" : formatSize(fileInfo.size),
@@ -151,16 +156,26 @@ const openFileExplorer = async (type: string) => {
 			lastModify: newDate(fileInfo.modifiedAt),
 			Directory: fileInfo.isDirectory ? "文件夹" : "文件"
 		});
-		fileList.forEach((item: FileListType, index: number) => {
-			item.key = index;
-		});
+		const list = await fileApi.getAllFiles({ start: 0, size: 50 });
+		fileList.value = list;
+		// fileList.push({
+		// 	key: 0,
+		// 	folderName: fileInfo.name,
+		// 	remarks: "",
+		// 	size: fileInfo.isDirectory ? "-" : formatSize(fileInfo.size),
+		// 	category: iconName.value,
+		// 	lastModify: newDate(fileInfo.modifiedAt),
+		// 	Directory: fileInfo.isDirectory ? "文件夹" : "文件"
+		// });
+		// fileList.forEach((item: FileListType, index: number) => {
+		// 	item.key = index;
+		// });
 	}
-	console.log("fileList", fileList);
 };
 
-//给文件排序
-const sortFiles = (files) => {
-	return files.sort((a, b) => {
+//排序：文件夹在前
+const folderUp = (files) => {
+	return files.value.sort((a, b) => {
 		if (a.Directory === "文件夹" && b.Directory === "文件夹") {
 			return a.folderName.localeCompare(b.folderName);
 		} else if (a.Directory === "文件夹") {
@@ -172,11 +187,18 @@ const sortFiles = (files) => {
 		}
 	});
 };
-const sort = () => {
-	console.log("paixu");
-	fileList = sortFiles(fileList);
+//排序: 文件在前
+const fileUp = (files) => {};
+
+const sort = (type) => {
+	console.log("paixu", type);
+	if (type == "on") {
+		fileList.value = folderUp(fileList);
+	} else {
+	}
 };
 </script>
+
 <style lang="scss" scoped>
 .index {
 	position: relative;

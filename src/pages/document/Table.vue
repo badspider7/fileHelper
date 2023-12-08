@@ -3,7 +3,7 @@
 		<n-data-table
 			:columns="columns"
 			:data="fileList"
-			:max-height="750"
+			:max-height="550"
 			:row-key="rowKey"
 			striped
 			@update:checked-row-keys="handleCheck" />
@@ -11,18 +11,28 @@
 </template>
 
 <script setup lang="ts">
-import { h, defineComponent, ref, nextTick, reactive } from "vue";
+import { h, defineComponent, ref, nextTick, reactive, watch, computed } from "vue";
 import type { DataTableRowKey } from "naive-ui";
-import { NInput } from "naive-ui";
+import { NInput, useMessage } from "naive-ui";
 import ColumnF from "./component/columnFolder.vue";
 import customHeaderCell from "./component/customHeaderCell.vue";
 const props = defineProps(["fileList"]);
 const emit = defineEmits(["sortFileInfo"]);
+const message = useMessage();
+import fileApi from "../../api/fileApi";
+
+watch(
+	() => props.fileList,
+	(newVal) => {
+		console.log("table fileList changed", newVal);
+	}
+);
 //编辑备注
 const ShowOrEdit = defineComponent({
 	props: {
 		value: [String, Number],
-		onUpdateValue: [Function, Array<string>]
+		onUpdateValue: [Function, Array<string>],
+		rowInfo: [Object, Array<object>]
 	},
 	setup(props) {
 		const isEdit = ref(false);
@@ -36,7 +46,11 @@ const ShowOrEdit = defineComponent({
 		}
 		function handleChange() {
 			props.onUpdateValue(inputValue.value);
+			let tempFileInfo = props.rowInfo;
+			console.log("handleChange", JSON.stringify(tempFileInfo));
+			fileApi.updateFileInfo(JSON.stringify(tempFileInfo));
 			isEdit.value = false;
+			message.success("修改成功");
 		}
 		return () =>
 			h(
@@ -54,7 +68,7 @@ const ShowOrEdit = defineComponent({
 							onUpdateValue: (v) => {
 								inputValue.value = v;
 							},
-							onChange: handleChange,
+							// onChange: handleChange,
 							onBlur: handleChange
 					  })
 					: props.value
@@ -81,9 +95,8 @@ const columns = [
 		key: "folderName",
 		title() {
 			return h(customHeaderCell, {
-				onEmitSort() {
-					console.log(222);
-					emit("sortFileInfo");
+				onEmitSort(type) {
+					emit("sortFileInfo", type);
 				}
 			});
 		},
@@ -101,9 +114,10 @@ const columns = [
 		render(row: RowData) {
 			const index = getDataIndex(row.key);
 			return h(ShowOrEdit, {
+				rowInfo: row,
 				value: row.remarks,
 				onUpdateValue(v: any) {
-					console.log(v);
+					console.log("v", v);
 					props.fileList[index].remarks = v;
 				}
 			});
@@ -155,7 +169,7 @@ const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 
 const handleCheck = (rowKeys: DataTableRowKey[]) => {
 	checkedRowKeysRef.value = rowKeys;
-	console.log("checked-row", checkedRowKeysRef.value);
+	console.log("被选中的行", checkedRowKeysRef.value);
 };
 </script>
 <style lang="scss" scoped>

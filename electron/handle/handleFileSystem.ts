@@ -1,6 +1,8 @@
 import { dialog } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
+import { ipcMain } from "electron";
+import fileListDB from '../db/fileList'
 
 //打开文件管理器
 /**
@@ -123,4 +125,25 @@ export function getCurrentFilesInfo(dirPath: string) {
     } catch (error) {
         console.log(error)
     }
+}
+
+export function setupHandleFile() {
+    //添加文件
+    ipcMain.handle('addFile', (event, fileInfo) => {
+        console.log('addFile', fileInfo)
+        return fileListDB.addFile(fileInfo);
+    })
+    //获取所有文件
+    ipcMain.handle('getAllFiles', (event, val) => {
+        console.log('getAllFiles', val)
+        return fileListDB.getAllFiles(val);
+    })
+
+    //修改文件信息
+    ipcMain.handle('updateFileInfo', (event, newFileInfo) => {
+        console.log('updateFileInfo', newFileInfo);
+        let file = JSON.parse(newFileInfo);
+        console.log('file', file)
+        return fileListDB.updateFile(file.key, file.remarks);
+    })
 }

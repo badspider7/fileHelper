@@ -1,11 +1,10 @@
 import { app, BrowserWindow, shell, ipcMain, dialog, Menu } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-import { setupTray } from '../handle/handleTray'
-import { setupTitleBarHandler, isMaximized } from '../handle/handleTitleBar'
-import { handleFileopen } from '../handle/handleFileSystem'
+import { setupHandle } from '../handle';
 import child_process from "child_process";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { initDB } from '../db';
 
 
 process.env.DIST_ELECTRON = join(__dirname, '..')
@@ -67,11 +66,9 @@ async function createWindow() {
     win.loadURL(url)
     win.webContents.openDevTools()
   } else {
+    Menu.setApplicationMenu(null);
     win.loadFile(indexHtml)
   }
-
-  setupTitleBarHandler(win);
-  isMaximized(win);
 
   //在加载页面时，渲染进程第一次完成绘制时，如果窗口还没有被显示，渲染进程会发出 ready-to-show 事件 。 在此事件后显示窗口将没有视觉闪烁：
   win.once("ready-to-show", () => {
@@ -81,6 +78,7 @@ async function createWindow() {
   });
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
+    initDB();
     // win?.webContents.send('main-process-message', new Date().toLocaleString())
   })
 
@@ -94,16 +92,7 @@ async function createWindow() {
 
 app.whenReady().then(() => {
   createWindow()
-  setupTray()
-  // Menu.setApplicationMenu(null);
-  ipcMain.on('set-title', (event, title) => {
-    const webContent = event.sender
-    const win = BrowserWindow.fromWebContents(webContent);
-    win.setTitle(title);
-  })
-  ipcMain.handle('fileSystem:openFile', (event, type) => {
-    return handleFileopen(event, type)
-  })
+  setupHandle(win)
   if (process.env.VITE_DEV_SERVER_URL) {
     installExtension(VUEJS3_DEVTOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
@@ -130,7 +119,6 @@ app.on('second-instance', () => {
 app.on('activate', () => {
   const allWindows = BrowserWindow.getAllWindows()
   if (allWindows.length) {
-
     allWindows[0].focus()
   } else {
     createWindow()
