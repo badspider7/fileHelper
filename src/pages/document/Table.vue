@@ -47,10 +47,9 @@ const ShowOrEdit = defineComponent({
 		function handleChange() {
 			props.onUpdateValue(inputValue.value);
 			let tempFileInfo = props.rowInfo;
-			console.log("handleChange", JSON.stringify(tempFileInfo));
 			fileApi.updateFileInfo(JSON.stringify(tempFileInfo));
 			isEdit.value = false;
-			message.success("修改成功");
+			message.success("修改成功", { duration: 1000 });
 		}
 		return () =>
 			h(
@@ -62,13 +61,18 @@ const ShowOrEdit = defineComponent({
 				},
 				isEdit.value
 					? h(NInput, {
+							maxlength: 30,
 							ref: inputRef,
 							clearable: true,
 							value: inputValue.value,
 							onUpdateValue: (v) => {
-								inputValue.value = v;
+								inputValue.value = v.trim();
 							},
-							// onChange: handleChange,
+							onInput: () => {
+								if (inputValue.value.length >= 30) {
+									message.error("字数不能大于30个");
+								}
+							},
 							onBlur: handleChange
 					  })
 					: props.value
