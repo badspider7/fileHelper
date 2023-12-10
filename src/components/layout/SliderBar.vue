@@ -5,11 +5,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, h, watch } from "vue";
-import { useMessage, type MenuOption } from "naive-ui";
+import { reactive, ref, h, watch, defineComponent, Component } from "vue";
+import { useMessage, type MenuOption, NIcon } from "naive-ui";
 import { RouterLink, useRouter } from "vue-router";
+import { TasksApp24Regular, CalendarLtr16Regular } from "@vicons/fluent";
 const router = useRouter();
 const message = useMessage();
+
+function renderIcon(icon: Component) {
+	return () => h(NIcon, null, { default: () => h(icon) });
+}
+
 const featureList: object[] = reactive([
 	{
 		label: () =>
@@ -22,7 +28,8 @@ const featureList: object[] = reactive([
 				},
 				{ default: () => "仪表盘" }
 			),
-		key: "index"
+		key: "index",
+		icon: renderIcon(TasksApp24Regular)
 	},
 	{
 		label: () =>
@@ -67,7 +74,8 @@ const featureList: object[] = reactive([
 					),
 				key: "done"
 			}
-		]
+		],
+		icon: renderIcon(TasksApp24Regular)
 	},
 	{
 		label: () =>
@@ -80,7 +88,8 @@ const featureList: object[] = reactive([
 				},
 				{ default: () => "日历" }
 			),
-		key: "calendar"
+		key: "calendar",
+		icon: renderIcon(CalendarLtr16Regular)
 	},
 	{
 		label: () =>

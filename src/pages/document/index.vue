@@ -159,20 +159,7 @@ const openFileExplorer = async (type: string) => {
 			lastModify: newDate(fileInfo.modifiedAt),
 			Directory: fileInfo.isDirectory ? "文件夹" : "文件"
 		});
-		const list = await fileApi.getAllFiles({ start: 0, size: 50 });
-		fileList.value = list;
-		// fileList.push({
-		// 	key: 0,
-		// 	folderName: fileInfo.name,
-		// 	remarks: "",
-		// 	size: fileInfo.isDirectory ? "-" : formatSize(fileInfo.size),
-		// 	category: iconName.value,
-		// 	lastModify: newDate(fileInfo.modifiedAt),
-		// 	Directory: fileInfo.isDirectory ? "文件夹" : "文件"
-		// });
-		// fileList.forEach((item: FileListType, index: number) => {
-		// 	item.key = index;
-		// });
+		store.getFileList();
 	}
 };
 
@@ -195,8 +182,9 @@ const fileUp = (files) => {};
 
 const sort = (type) => {
 	console.log("paixu", type);
-	if (type == "on") {
-		fileList.value = folderUp(fileList);
+	if (type == "up") {
+		store.fileList.value = folderUp(fileList);
+		console.log("store.fileList", store.fileList);
 	} else {
 	}
 };
