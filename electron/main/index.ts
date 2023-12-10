@@ -74,7 +74,7 @@ async function createWindow() {
   win.once("ready-to-show", () => {
     win.show();
     //限制窗口的最小化尺寸
-    win.setMinimumSize(1000, 800)
+    win.setMinimumSize(800, 600)
   });
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {

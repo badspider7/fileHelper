@@ -3,10 +3,12 @@
 		<n-data-table
 			:columns="columns"
 			:data="fileList"
-			:max-height="550"
 			:row-key="rowKey"
+			:max-height="500"
 			striped
-			@update:checked-row-keys="handleCheck" />
+			:row-props="rightClick"
+			@update:checked-row-keys="handleRowCheck" />
+		<rightClickMenu :position="position" ref="clickMenu" :rowInfo="rowInfo" />
 	</div>
 </template>
 
@@ -16,6 +18,7 @@ import type { DataTableRowKey } from "naive-ui";
 import { NInput, useMessage } from "naive-ui";
 import ColumnF from "./component/columnFolder.vue";
 import customHeaderCell from "./component/customHeaderCell.vue";
+import rightClickMenu from "./rightClickMenu.vue";
 const props = defineProps(["fileList"]);
 const emit = defineEmits(["sortFileInfo"]);
 const message = useMessage();
@@ -50,6 +53,7 @@ const ShowOrEdit = defineComponent({
 			fileApi.updateFileInfo(JSON.stringify(tempFileInfo));
 			isEdit.value = false;
 			message.success("修改成功", { duration: 1000 });
+			//TODO:更新数据
 		}
 		return () =>
 			h(
@@ -111,9 +115,12 @@ const columns = [
 	},
 	{
 		key: "remarks",
-
+		minWidth: 200,
 		title() {
-			return h("div", ["备注", h("span", { style: { fontSize: "12px", color: "#676363" } }, "（点击行即可备注）")]);
+			return h("div", { class: "remarks" }, [
+				"备注",
+				h("span", { style: { fontSize: "12px", color: "#676363" } }, "（点击行即可备注）")
+			]);
 		},
 		render(row: RowData) {
 			const index = getDataIndex(row.key);
@@ -139,8 +146,9 @@ const columns = [
 	},
 	{
 		key: "category",
+		align: "center",
 		title() {
-			return h("div", { size: "20", type: "info" }, { default: () => "类型" });
+			return h("div", { type: "info" }, { default: () => "类型" });
 		},
 		render: (item) => {
 			return h("span", item.Directory == "文件夹" ? "文件夹" : item.category);
@@ -148,7 +156,7 @@ const columns = [
 		ellipsis: {
 			tooltip: true
 		},
-		width: 100
+		width: 80
 	},
 	{
 		key: "lastModify",
@@ -171,9 +179,27 @@ const getDataIndex = (key: number) => {
 //选中的行
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 
-const handleCheck = (rowKeys: DataTableRowKey[]) => {
+const handleRowCheck = (rowKeys: DataTableRowKey[]) => {
 	checkedRowKeysRef.value = rowKeys;
 	console.log("被选中的行", checkedRowKeysRef.value);
+};
+
+let position = reactive({ x: 0, y: 0 });
+const clickMenu = ref(null);
+let rowInfo = ref(null);
+//右击行
+const rightClick = (row) => {
+	return {
+		onContextmenu: (e: MouseEvent) => {
+			position.x = e.clientX;
+			position.y = e.clientY;
+			clickMenu.value.showContextMenu();
+			// console.log("clickMenu",);
+			rowInfo.value = JSON.stringify(row);
+			console.log("position", position);
+			console.log("row", row);
+		}
+	};
 };
 </script>
 <style lang="scss" scoped>
@@ -181,5 +207,12 @@ const handleCheck = (rowKeys: DataTableRowKey[]) => {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+}
+:deep(.n-data-table-th) {
+	.remarks {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
 }
 </style>

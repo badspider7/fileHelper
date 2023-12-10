@@ -91,7 +91,7 @@ const featureList: object[] = reactive([
 						name: "message"
 					}
 				},
-				{ default: () => "消息" }
+				{ default: () => "日志" }
 			),
 		key: "message"
 	}

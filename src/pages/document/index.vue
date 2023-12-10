@@ -30,7 +30,7 @@
 			</div> -->
 		</div>
 		<div class="container">
-			<FileTable :file-list="fileList" v-if="flag" @sortFileInfo="sort"></FileTable>
+			<FileTable :file-list="store.fileList" v-if="flag" @sortFileInfo="sort"></FileTable>
 		</div>
 	</div>
 </template>
@@ -40,6 +40,9 @@ import { FolderAdd28Regular, DocumentAdd24Regular } from "@vicons/fluent";
 import { reactive, ref, onBeforeMount, watch } from "vue";
 import FileTable from "./Table.vue";
 import fileApi from "../../api/fileApi";
+import useFileStore from "@/store/fileSystem";
+
+const store = useFileStore();
 
 interface FileListType {
 	key: number;
@@ -52,10 +55,10 @@ interface FileListType {
 let fileList: any = ref([]);
 let flag = ref(false);
 onBeforeMount(async () => {
-	const list = await fileApi.getAllFiles({ start: 0, size: 50 });
+	fileList.value = await store.getFileList();
 	flag.value = true;
-	fileList.value = list;
 });
+
 //标准时间格式化
 const newDate = (time: string) => {
 	let date = new Date(time);

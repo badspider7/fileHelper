@@ -7,5 +7,8 @@ export default {
     },
     updateFileInfo(updatedFileInfo: string) {
         return window.ipcRenderer.invoke('updateFileInfo', updatedFileInfo);
+    },
+    deleteFile(key: number) {
+        return window.ipcRenderer.invoke('deleteFile', key);
     }
 }

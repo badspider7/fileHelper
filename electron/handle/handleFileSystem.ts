@@ -146,4 +146,10 @@ export function setupHandleFile() {
         console.log('file', file)
         return fileListDB.updateFile(file.key, file.remarks);
     })
+
+    //删除文件
+    ipcMain.handle('deleteFile', (event, key) => {
+        console.log('deleteFile', key);
+        return fileListDB.deleteFile(key);
+    })
 }
