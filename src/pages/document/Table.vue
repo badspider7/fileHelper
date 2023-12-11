@@ -110,12 +110,10 @@ const columns = [
 		},
 		render: (item) => {
 			return h(ColumnF, { folderName: item.folderName, category: item.category });
-		},
-		width: 200
+		}
 	},
 	{
 		key: "remarks",
-		minWidth: 200,
 		title() {
 			return h("div", { class: "remarks" }, [
 				"备注",
@@ -155,8 +153,7 @@ const columns = [
 		},
 		ellipsis: {
 			tooltip: true
-		},
-		width: 80
+		}
 	},
 	{
 		key: "lastModify",
@@ -165,8 +162,7 @@ const columns = [
 		},
 		ellipsis: {
 			tooltip: true
-		},
-		width: 180
+		}
 	}
 ];
 //每行绑定的key

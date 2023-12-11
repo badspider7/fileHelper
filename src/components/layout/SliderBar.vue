@@ -5,10 +5,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, h, watch, defineComponent, Component } from "vue";
+import { reactive, ref, h, watch, Component } from "vue";
 import { useMessage, type MenuOption, NIcon } from "naive-ui";
 import { RouterLink, useRouter } from "vue-router";
-import { TasksApp24Regular, CalendarLtr16Regular } from "@vicons/fluent";
+import {
+	TasksApp24Regular,
+	CalendarLtr16Regular,
+	DocumentEndnote24Regular,
+	TaskListSquareLtr20Regular,
+	Archive16Regular,
+	Bookmark16Regular,
+	CalligraphyPen20Regular,
+	CalligraphyPenCheckmark20Regular
+} from "@vicons/fluent";
 const router = useRouter();
 const message = useMessage();
 
@@ -29,7 +38,7 @@ const featureList: object[] = reactive([
 				{ default: () => "仪表盘" }
 			),
 		key: "index",
-		icon: renderIcon(TasksApp24Regular)
+		icon: renderIcon(Bookmark16Regular)
 	},
 	{
 		label: () =>
@@ -42,7 +51,8 @@ const featureList: object[] = reactive([
 				},
 				{ default: () => "文件" }
 			),
-		key: "folders"
+		key: "folders",
+		icon: renderIcon(Archive16Regular)
 	},
 	{
 		label: "任务",
@@ -54,12 +64,13 @@ const featureList: object[] = reactive([
 						RouterLink,
 						{
 							to: {
-								name: "done"
+								name: "todo"
 							}
 						},
-						{ default: () => "已办" }
+						{ default: () => "待办" }
 					),
-				key: "todo"
+				key: "done",
+				icon: renderIcon(CalligraphyPen20Regular)
 			},
 			{
 				label: () =>
@@ -67,15 +78,16 @@ const featureList: object[] = reactive([
 						RouterLink,
 						{
 							to: {
-								name: "todo"
+								name: "done"
 							}
 						},
-						{ default: () => "待办" }
+						{ default: () => "已办" }
 					),
-				key: "done"
+				key: "todo",
+				icon: renderIcon(CalligraphyPenCheckmark20Regular)
 			}
 		],
-		icon: renderIcon(TasksApp24Regular)
+		icon: renderIcon(TaskListSquareLtr20Regular)
 	},
 	{
 		label: () =>
@@ -102,7 +114,8 @@ const featureList: object[] = reactive([
 				},
 				{ default: () => "日志" }
 			),
-		key: "message"
+		key: "message",
+		icon: renderIcon(DocumentEndnote24Regular)
 	}
 ]);
 

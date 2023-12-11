@@ -150,9 +150,6 @@ onBeforeUnmount(() => {
 	height: 200px;
 	// background-color: aqua;
 	z-index: 999;
-
-	.container {
-	}
 }
 :global(._mask) {
 	position: fixed;
@@ -166,5 +163,8 @@ onBeforeUnmount(() => {
 :global(.v-binder-follower-content) {
 	width: 180px;
 	height: fit-content;
+}
+:global(.n-dropdown-menu) {
+	width: 100% !important;
 }
 </style>

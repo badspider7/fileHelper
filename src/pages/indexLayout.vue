@@ -30,7 +30,7 @@ import { TransitionSlide } from "@morev/vue-transitions";
 	flex-direction: column;
 	.container {
 		display: grid;
-		grid-template-columns: 2fr 7fr;
+		grid-template-columns: 200px auto;
 		flex: 1;
 	}
 }

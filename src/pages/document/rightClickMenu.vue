@@ -34,6 +34,22 @@ const showDropdown = ref(false);
 
 const clickMenu = ref([
 	{
+		label: () => h("span", { style: { fontWeight: "bold" } }, "打开"),
+		key: "open"
+	},
+	{
+		label: "查看详情",
+		key: "detail"
+	},
+	{
+		label: "用vscode打开",
+		key: "openWithVscode"
+	},
+	{
+		label: "在文件夹打开",
+		key: "openWithFolder"
+	},
+	{
 		label: "添加备注",
 		key: "addBackup"
 	},
