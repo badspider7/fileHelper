@@ -1,7 +1,7 @@
 <template>
 	<div class="index">
 		<div class="header">
-			<div class="left">文件</div>
+			<div class="left" v-tooltip:bottom="'文件'">文件</div>
 			<div class="right">
 				<div class="addFile" @click="openFileExplorer('file')">
 					<DocumentAdd24Regular />

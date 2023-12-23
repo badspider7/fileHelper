@@ -1,10 +1,13 @@
-import clickOutside from './clickOutside'
 import tooltip from './tooltip'
 
+const directives = {
+    tooltip
+}
 
 export default {
     install(app: any) {
-        app.directive('clickOutside', clickOutside)
-        app.directive('tooltip', tooltip)
+        Object.keys(directives).forEach(key => {
+            app.directive(key, directives[key])
+        })
     }
 }
