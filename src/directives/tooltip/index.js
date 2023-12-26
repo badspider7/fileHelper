@@ -20,14 +20,12 @@ if (!tooltipApp && tooltipContainerDom._tooltipApp) {
 	tooltipApp = tooltipContainerDom._tooltipApp;
 }
 
-function initOrUpdate(el, binding) {
+function initOrUpdate(el, binding, vnode) {
 	const placement = binding.arg ? binding.arg : "bottom";
 	const text = binding.value;
 	const { addTooltip, hideTooltip, showTooltip, updatePlacementAndContent } = tooltipApp._instance.exposed;
 	if (!el.tooltipIdx) {
-		console.log("1111", tooltipApp._instance.exposed);
-
-		addTooltip(el, text, placement);
+		addTooltip(el, text, placement, vnode.props?.offset ?? 6, vnode.props?.arrow ?? true);
 		function onMouseenter() {
 			showTooltip(el);
 		}
@@ -47,13 +45,16 @@ function initOrUpdate(el, binding) {
 }
 
 export default {
-	mounted(el, binding) {
-		initOrUpdate(el, binding);
+	mounted(el, binding, vnode) {
+		console.log("mounted");
+		initOrUpdate(el, binding, vnode);
 	},
-	updated(el, binding) {
-		initOrUpdate(el, binding);
+	updated(el, binding, vnode) {
+		console.log("updated123");
+		initOrUpdate(el, binding, vnode);
 	},
 	beforeUnmount(el) {
+		console.log("beforeUnmount");
 		const { deleteTooltip } = tooltipApp._instance.exposed;
 		el._removeEventListener && el._removeEventListener();
 		deleteTooltip(el);

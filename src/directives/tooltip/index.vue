@@ -8,6 +8,8 @@ export interface TooltipInfo {
 	showTooltip: boolean;
 	content: string;
 	placement: Side;
+	offset: number;
+	arrow: boolean;
 }
 export interface TooltipReferenceHTMLElement extends HTMLElement {
 	_tooltipIdx: number;
@@ -18,7 +20,7 @@ function validateElIsBindTooltip(el: TooltipReferenceHTMLElement) {
 const toolipInfoArr = reactive<TooltipInfo[]>([]);
 let tooltipIdx = 1;
 
-function addTooltip(el: TooltipReferenceHTMLElement, content: string, placement: Side) {
+function addTooltip(el: TooltipReferenceHTMLElement, content: string, placement: Side, offset: number, arrow: boolean) {
 	if (!el._tooltipIdx) {
 		el._tooltipIdx = tooltipIdx++;
 	}
@@ -27,7 +29,9 @@ function addTooltip(el: TooltipReferenceHTMLElement, content: string, placement:
 		idx: el._tooltipIdx,
 		showTooltip: false,
 		content,
-		placement
+		placement,
+		offset,
+		arrow
 	});
 }
 const tooltipContainerRef = ref<HTMLElement>();
@@ -42,7 +46,7 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 	tooltipInfo.showTooltip = true;
 	setTimeout(() => {
 		// 等待界面渲染完毕，找到tooltip所在dom节点
-		const arrowEl = document.querySelector("#arrow");
+		const arrowEl = document.querySelector("#arrow") as HTMLElement;
 		const tooltipDom = tooltipContainerRef.value?.querySelector(
 			`[data-tooltip-idx="${tooltipInfo.idx}"]`
 		) as HTMLElement;
@@ -52,16 +56,15 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 		// 使用floating-ui实现tooltip
 		computePosition(el, tooltipDom, {
 			placement: tooltipInfo.placement,
-			middleware: [flip(), shift(), offset(6), arrow({ element: arrowEl })]
+			middleware: [flip(), shift(), offset(tooltipInfo.offset), arrow({ element: arrowEl })]
 		}).then(({ x, y, placement, middlewareData }) => {
 			// Accessing the data
-
 			Object.assign(tooltipDom.style, {
 				top: `${y}px`,
 				left: `${x}px`
 			});
-			const { x: arrowX, y: arrowY } = middlewareData.arrow;
 
+			const { x: arrowX, y: arrowY } = middlewareData.arrow;
 			const staticSide = {
 				top: "bottom",
 				right: "left",
@@ -69,13 +72,17 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 				left: "right"
 			}[placement.split("-")[0]];
 
-			Object.assign((arrowEl as HTMLElement).style, {
-				left: arrowX != null ? `${arrowX}px` : "",
-				top: arrowY != null ? `${arrowY}px` : "",
-				right: "",
-				bottom: "",
-				[staticSide]: "-4px"
-			});
+			if (middlewareData.arrow) {
+				console.log("tooltipInfo", tooltipInfo.arrow);
+				Object.assign(arrowEl.style, {
+					display: tooltipInfo.arrow ? "block" : "none",
+					left: arrowX != null ? `${arrowX}px` : "",
+					top: arrowY != null ? `${arrowY}px` : "",
+					right: "",
+					bottom: "",
+					[staticSide]: "-4px"
+				});
+			}
 		});
 	});
 }
@@ -87,10 +94,14 @@ function hideTooltip(el: TooltipReferenceHTMLElement) {
 	if (!tooltipInfo) {
 		return;
 	}
+	//销毁arrow
+	const arrow = document.querySelector("#arrow");
+	arrow && arrow.remove();
 	// dom的销毁交给vue完成
 	tooltipInfo.showTooltip = false;
 }
 function updatePlacementAndContent(el: TooltipReferenceHTMLElement, placement: Side, content: string) {
+	console.log("updatePlacementAndContent");
 	if (!validateElIsBindTooltip(el)) {
 		return;
 	}
@@ -148,6 +159,7 @@ defineExpose({
 		width: 8px;
 		height: 8px;
 		transform: rotate(45deg);
+		pointer-events: none;
 	}
 }
 

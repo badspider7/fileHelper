@@ -16,14 +16,14 @@
 		</div>
 		<div class="right">
 			<div class="controls">
-				<div id="minimize" @click="minimizeHandler">
+				<div id="minimize" @click="minimizeHandler" :arrow="false" v-tooltip:bottom="'最小化'">
 					<Subtract16Regular />
 				</div>
-				<div id="maxMize" @click="maxmizeHandler">
+				<div id="maxMize" @click="maxmizeHandler" :arrow="false" v-tooltip:bottom="'最大化'">
 					<Maximize16Regular v-if="!isMaxmize" />
 					<CopySelect20Regular v-else />
 				</div>
-				<div id="close" @click="closeHandler">
+				<div id="close" @click="closeHandler" :arrow="false" v-tooltip:bottom="'关闭'">
 					<Dismiss16Regular />
 				</div>
 			</div>

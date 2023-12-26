@@ -1,12 +1,12 @@
 <template>
 	<div class="index">
 		<div class="header">
-			<div class="left" v-tooltip:bottom="'文件'">文件</div>
+			<div class="left">文件</div>
 			<div class="right">
-				<div class="addFile" @click="openFileExplorer('file')">
+				<div class="addFile" @click="openFileExplorer('file')" :offset="10" v-tooltip:bottom="'添加文件'">
 					<DocumentAdd24Regular />
 				</div>
-				<div class="addFolder" @click="openFileExplorer('folder')">
+				<div class="addFolder" @click="openFileExplorer('folder')" v-tooltip:bottom="'添加文件夹'">
 					<FolderAdd28Regular />
 				</div>
 			</div>
