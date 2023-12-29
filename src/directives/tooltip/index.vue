@@ -56,7 +56,7 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 		// 使用floating-ui实现tooltip
 		computePosition(el, tooltipDom, {
 			placement: tooltipInfo.placement,
-			middleware: [flip(), shift(), offset(tooltipInfo.offset), arrow({ element: arrowEl })]
+			middleware: [offset(tooltipInfo.offset), flip(), shift({ padding: 2 }), arrow({ element: arrowEl })]
 		}).then(({ x, y, placement, middlewareData }) => {
 			// Accessing the data
 			Object.assign(tooltipDom.style, {
@@ -94,11 +94,12 @@ function hideTooltip(el: TooltipReferenceHTMLElement) {
 	if (!tooltipInfo) {
 		return;
 	}
+
+	// dom的销毁交给vue完成
+	tooltipInfo.showTooltip = false;
 	//销毁arrow
 	const arrow = document.querySelector("#arrow");
 	arrow && arrow.remove();
-	// dom的销毁交给vue完成
-	tooltipInfo.showTooltip = false;
 }
 function updatePlacementAndContent(el: TooltipReferenceHTMLElement, placement: Side, content: string) {
 	console.log("updatePlacementAndContent");
@@ -138,6 +139,7 @@ defineExpose({
 			<div v-if="toolipInfo.showTooltip && toolipInfo.content" class="tooltipDom" :data-tooltip-idx="toolipInfo.idx">
 				{{ toolipInfo.content }}
 				<div id="arrow"></div>
+				<slot name="content"></slot>
 			</div>
 		</transition>
 	</div>
@@ -151,7 +153,7 @@ defineExpose({
 	position: absolute;
 	background-color: #222;
 	color: #fff;
-	padding: 2px 10px;
+	padding: 4px 10px;
 	border-radius: 5px;
 	#arrow {
 		position: absolute;

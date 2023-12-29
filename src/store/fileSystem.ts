@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 import fileApi from '../api/fileApi';
 
 const useFileStore = defineStore('file', () => {
-    const fileList = ref([]);
+    const fileList: Ref = ref([]);
 
     async function getFileList() {
         console.log('emit store')

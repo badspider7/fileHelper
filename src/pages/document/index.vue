@@ -40,7 +40,7 @@ import { FolderAdd28Regular, DocumentAdd24Regular } from "@vicons/fluent";
 import { reactive, ref, onBeforeMount, watch } from "vue";
 import FileTable from "./Table.vue";
 import fileApi from "../../api/fileApi";
-import useFileStore from "@/store/fileSystem";
+import useFileStore from "../../store/fileSystem";
 
 const store = useFileStore();
 
