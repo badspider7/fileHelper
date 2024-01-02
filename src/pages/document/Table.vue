@@ -40,7 +40,7 @@ const ShowOrEdit = defineComponent({
 	setup(props) {
 		const isEdit = ref(false);
 		const inputRef = ref(null);
-		const inputValue = ref(props.value);
+		const inputValue = ref(props.value as string);
 		function handleOnClick() {
 			isEdit.value = true;
 			nextTick(() => {
@@ -83,6 +83,8 @@ const ShowOrEdit = defineComponent({
 			);
 	}
 });
+
+console.log("ShowOrEdit", ShowOrEdit);
 
 type RowData = {
 	key: number;

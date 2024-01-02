@@ -128,10 +128,23 @@ watch(checkedMenu, (newVal, oldVal) => {
 		});
 	}
 });
+
+watch(
+	() => router.currentRoute.value.path,
+	(newVal, oldVal) => {
+		handleUpdateValue(newVal.replace("/", ""));
+		// console.log("router", newVal);
+		// checkedMenu.value = newVal.replace("/", "");
+	}
+);
 checkedMenu.value = "index";
 
-const handleUpdateValue = (key: string, item: MenuOption) => {
-	checkedMenu.value = key;
+const handleUpdateValue = (key: string) => {
+	if (key == "") {
+		checkedMenu.value = "index";
+	} else {
+		checkedMenu.value = key;
+	}
 };
 </script>
 <style lang="scss" scoped>

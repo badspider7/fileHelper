@@ -19,7 +19,7 @@
 				<div id="minimize" @click="minimizeHandler" :arrow="false" v-tooltip:bottom="'最小化'">
 					<Subtract16Regular />
 				</div>
-				<div id="maxMize" @click="maxmizeHandler" :arrow="false" v-tooltip:bottom="'最大化'">
+				<div id="maxMize" @click="maxmizeHandler" :arrow="false" v-tooltip:bottom="isMaxmize ? '还原' : '最大化'">
 					<Maximize16Regular v-if="!isMaxmize" />
 					<CopySelect20Regular v-else />
 				</div>

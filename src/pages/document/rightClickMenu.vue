@@ -70,6 +70,8 @@ const handleSelect = (key: string) => {
 		fileApi.deleteFile(JSON.parse(props.rowInfo).key);
 		store.getFileList();
 		message.success("删除成功");
+	} else if (key == "addBackup") {
+		//添加备注
 	}
 };
 
