@@ -33,6 +33,10 @@ const useDB = (db: Database.Database) => ({
 		const query = `select * from fileList order by key ASC  limit ${size} offset ${start}`;
 		return db.prepare(query).all();
 	},
+	getFileById(key: number) {
+		const insert = db.prepare(`select * from fileList where key = ?`);
+		return insert.get(key);
+	},
 	addFile(fileInfo: any) {
 		const insert = db.prepare(`insert into fileList (folderName,remarks,size,category,lastModify,Directory) values (?,?,?,?,?,?)`);
 		insert.run(fileInfo.folderName, fileInfo.remarks, fileInfo.size, fileInfo.category, fileInfo.lastModify, fileInfo.Directory);

@@ -71,7 +71,8 @@ const handleSelect = (key: string) => {
 		let fileInfo = JSON.parse(props.rowInfo);
 		dialog.warning({
 			title: "警告",
-			content: `确定删除文件${fileInfo.folderName}，删除后无法恢复`,
+			// `确定删除文件${fileInfo.folderName}，删除后无法恢复`
+			content: () => h("div", ["确定删除文件", h("span", { style: { color: "#57B8AA" } }, fileInfo.folderName)]),
 			positiveText: "确定",
 			negativeText: "取消",
 			closeOnEsc: false,

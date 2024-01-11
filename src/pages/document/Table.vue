@@ -24,6 +24,16 @@ const emit = defineEmits(["sortFileInfo"]);
 const message = useMessage();
 import fileApi from "../../api/fileApi";
 
+interface RowData {
+	key: number;
+	folderName: string;
+	remarks: string;
+	size: string;
+	category: string;
+	lastModify: string;
+	Directory: string;
+}
+
 watch(
 	() => props.fileList,
 	(newVal) => {
@@ -35,7 +45,9 @@ const ShowOrEdit = defineComponent({
 	props: {
 		value: [String, Number],
 		onUpdateValue: [Function, Array<string>],
-		rowInfo: [Object, Array<object>]
+		rowInfo: {
+			type: Object as () => RowData
+		}
 	},
 	setup(props) {
 		const isEdit = ref(false);
@@ -47,9 +59,15 @@ const ShowOrEdit = defineComponent({
 				inputRef.value.focus();
 			});
 		}
-		function handleChange() {
+		async function handleChange() {
 			props.onUpdateValue(inputValue.value);
-			let tempFileInfo = props.rowInfo;
+			let tempFileInfo: RowData = props.rowInfo;
+			const fileInfo = await fileApi.getFileById(tempFileInfo.key);
+			//判断 如果备注和原来的一样 则不修改
+			if (fileInfo.remarks === tempFileInfo.remarks) {
+				isEdit.value = false;
+				return;
+			}
 			fileApi.updateFileInfo(JSON.stringify(tempFileInfo));
 			isEdit.value = false;
 			message.success("修改成功", { duration: 1000 });
@@ -86,15 +104,6 @@ const ShowOrEdit = defineComponent({
 
 console.log("ShowOrEdit", ShowOrEdit);
 
-type RowData = {
-	key: number;
-	folderName: string;
-	remarks: string;
-	size: string;
-	category: string;
-	lastModify: string;
-	Directory: string;
-};
 //表头
 const columns = [
 	{

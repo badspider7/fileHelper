@@ -10,5 +10,8 @@ export default {
     },
     deleteFile(key: number) {
         return window.ipcRenderer.invoke('deleteFile', key);
+    },
+    getFileById(key: number) {
+        return window.ipcRenderer.invoke('getFileById', key);
     }
 }
