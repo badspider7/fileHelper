@@ -194,7 +194,6 @@ const rightClick = (row) => {
 			clickMenu.value.showContextMenu();
 			// console.log("clickMenu",);
 			rowInfo.value = JSON.stringify(row);
-			console.log("position", position);
 			console.log("row", row);
 		}
 	};
