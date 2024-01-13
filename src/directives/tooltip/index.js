@@ -55,6 +55,7 @@ export default {
 		initOrUpdate(el, binding, vnode);
 	},
 	beforeUnmount(el) {
+		console.log("beforeUnmount====");
 		const { deleteTooltip } = tooltipApp._instance.exposed;
 		el._removeEventListener && el._removeEventListener();
 		deleteTooltip(el);

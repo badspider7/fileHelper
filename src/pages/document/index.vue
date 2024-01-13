@@ -41,8 +41,10 @@ import { reactive, ref, onBeforeMount, watch } from "vue";
 import FileTable from "./Table.vue";
 import fileApi from "../../api/fileApi";
 import useFileStore from "../../store/fileSystem";
+import { useMessage } from "naive-ui";
 
 const store = useFileStore();
+const message = useMessage();
 
 interface FileListType {
 	key: number;
@@ -145,9 +147,29 @@ const judgeFileCate = (fileInfo) => {
 		}
 	}
 };
+//判断数据库中是否已经存在数据
+const judgeFileExist = async (fileInfo) => {
+	//1.从数据库中拿到数据
+	let fileList = await fileApi.getAllFiles();
+	//2.进行 名字和路径的比对
+	for (let item of fileList) {
+		if (item.folderName == fileInfo.name && item.filePath == fileInfo.path) {
+			return true;
+		}
+	}
+	return false;
+	// if(fileList.)
+};
 //添加文件
 const openFileExplorer = async (type: string) => {
 	const fileInfo = await window.renderApi.openFile(type);
+	//判断文件是否存在
+	const isFileExist = await judgeFileExist(fileInfo);
+	if (isFileExist) {
+		message.error("文件已存在");
+		return;
+	}
+	console.log("1111", isFileExist);
 	if (fileInfo) {
 		iconName.value = "";
 		judgeFileCate(fileInfo);
@@ -157,7 +179,8 @@ const openFileExplorer = async (type: string) => {
 			size: fileInfo.isDirectory ? "-" : formatSize(fileInfo.size),
 			category: iconName.value,
 			lastModify: newDate(fileInfo.modifiedAt),
-			Directory: fileInfo.isDirectory ? "文件夹" : "文件"
+			Directory: fileInfo.isDirectory ? "文件夹" : "文件",
+			path: fileInfo.path
 		});
 		store.getFileList();
 	}

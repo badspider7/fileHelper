@@ -152,4 +152,10 @@ export function setupHandleFile() {
         console.log('deleteFile', key);
         return fileListDB.deleteFile(key);
     })
+
+    //根据id获取文件信息
+    ipcMain.handle('getFileById', (event, key) => {
+        console.log('getFileById', key);
+        return fileListDB.getFileById(key);
+    })
 }

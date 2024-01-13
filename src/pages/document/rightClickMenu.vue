@@ -14,12 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
+import { useMessage, useDialog } from "naive-ui";
 import { ref, h } from "vue";
 import fileApi from "@/api/fileApi";
 import useFileStore from "@/store/fileSystem";
 const store = useFileStore();
 const message = useMessage();
+const dialog = useDialog();
 const props = defineProps({
 	position: {
 		type: Object,
@@ -67,9 +68,26 @@ const onClickoutside = () => {
 const handleSelect = (key: string) => {
 	showDropdown.value = false;
 	if (key === "delete") {
-		fileApi.deleteFile(JSON.parse(props.rowInfo).key);
-		store.getFileList();
-		message.success("删除成功");
+		let fileInfo = JSON.parse(props.rowInfo);
+		dialog.warning({
+			title: "警告",
+			// `确定删除文件${fileInfo.folderName}，删除后无法恢复`
+			content: () => h("div", ["确定删除文件", h("span", { style: { color: "#57B8AA" } }, fileInfo.folderName)]),
+			positiveText: "确定",
+			negativeText: "取消",
+			closeOnEsc: false,
+			maskClosable: false,
+			onPositiveClick: () => {
+				fileApi.deleteFile(JSON.parse(props.rowInfo).key);
+				store.getFileList();
+				message.success("删除成功");
+			},
+			onNegativeClick: () => {
+				message.warning("取消删除");
+			}
+		});
+	} else if (key == "addBackup") {
+		//添加备注
 	}
 };
 

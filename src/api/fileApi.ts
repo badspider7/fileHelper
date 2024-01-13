@@ -2,7 +2,7 @@ export default {
     addFile(fileInfo: object) {
         return window.ipcRenderer.invoke('addFile', fileInfo);
     },
-    getAllFiles(val) {
+    getAllFiles(val?: any) {
         return window.ipcRenderer.invoke('getAllFiles', val);
     },
     updateFileInfo(updatedFileInfo: string) {
@@ -10,5 +10,8 @@ export default {
     },
     deleteFile(key: number) {
         return window.ipcRenderer.invoke('deleteFile', key);
+    },
+    getFileById(key: number) {
+        return window.ipcRenderer.invoke('getFileById', key);
     }
 }

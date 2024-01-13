@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computePosition, flip, offset, shift, arrow } from "@floating-ui/dom";
-import { onBeforeUnmount, reactive, ref, toRefs } from "vue";
+import { reactive, ref } from "vue";
 
 export type Side = "top" | "right" | "bottom" | "left";
 export interface TooltipInfo {
@@ -46,7 +46,8 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 	tooltipInfo.showTooltip = true;
 	setTimeout(() => {
 		// 等待界面渲染完毕，找到tooltip所在dom节点
-		const arrowEl = document.querySelector("#arrow") as HTMLElement;
+		// const arrowEl = document.querySelector("#arrow") as HTMLElement;
+		const arrowEl = document.querySelector(`[data-arrow-idx="${tooltipInfo.idx}"]`) as HTMLElement;
 		const tooltipDom = tooltipContainerRef.value?.querySelector(
 			`[data-tooltip-idx="${tooltipInfo.idx}"]`
 		) as HTMLElement;
@@ -71,9 +72,7 @@ function showTooltip(el: TooltipReferenceHTMLElement) {
 				bottom: "top",
 				left: "right"
 			}[placement.split("-")[0]];
-
 			if (middlewareData.arrow) {
-				console.log("tooltipInfo", tooltipInfo.arrow);
 				Object.assign(arrowEl.style, {
 					display: tooltipInfo.arrow ? "block" : "none",
 					left: arrowX != null ? `${arrowX}px` : "",
@@ -98,11 +97,8 @@ function hideTooltip(el: TooltipReferenceHTMLElement) {
 	// dom的销毁交给vue完成
 	tooltipInfo.showTooltip = false;
 	//销毁arrow
-	const arrow = document.querySelector("#arrow");
-	arrow && arrow.remove();
 }
 function updatePlacementAndContent(el: TooltipReferenceHTMLElement, placement: Side, content: string) {
-	console.log("updatePlacementAndContent");
 	if (!validateElIsBindTooltip(el)) {
 		return;
 	}
@@ -138,8 +134,7 @@ defineExpose({
 		<transition name="fade" v-for="toolipInfo in toolipInfoArr" :key="toolipInfo.idx">
 			<div v-if="toolipInfo.showTooltip && toolipInfo.content" class="tooltipDom" :data-tooltip-idx="toolipInfo.idx">
 				{{ toolipInfo.content }}
-				<div id="arrow"></div>
-				<slot name="content"></slot>
+				<div id="arrow" :data-arrow-idx="toolipInfo.idx"></div>
 			</div>
 		</transition>
 	</div>

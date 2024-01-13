@@ -19,6 +19,7 @@ const useDB = (db: Database.Database) => ({
 			folderName TEXT not null,
 			remarks TEXT,
 			size TEXT,
+			filePath TEXT not NULL,
 			category TEXT,
 			Directory TEXT,
 			lastModify TEXT
@@ -33,9 +34,13 @@ const useDB = (db: Database.Database) => ({
 		const query = `select * from fileList order by key ASC  limit ${size} offset ${start}`;
 		return db.prepare(query).all();
 	},
+	getFileById(key: number) {
+		const insert = db.prepare(`select * from fileList where key = ?`);
+		return insert.get(key);
+	},
 	addFile(fileInfo: any) {
-		const insert = db.prepare(`insert into fileList (folderName,remarks,size,category,lastModify,Directory) values (?,?,?,?,?,?)`);
-		insert.run(fileInfo.folderName, fileInfo.remarks, fileInfo.size, fileInfo.category, fileInfo.lastModify, fileInfo.Directory);
+		const insert = db.prepare(`insert into fileList (folderName,remarks,size,category,filePath,lastModify,Directory) values (?,?,?,?,?,?,?)`);
+		insert.run(fileInfo.folderName, fileInfo.remarks, fileInfo.size, fileInfo.category, fileInfo.path, fileInfo.lastModify, fileInfo.Directory);
 	},
 	deleteFile(key: number) {
 		const delStmt = db.prepare("delete from fileList where key = :key");
