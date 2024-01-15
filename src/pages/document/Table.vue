@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, defineComponent, ref, nextTick, reactive, watch, computed } from "vue";
+import { h, defineComponent, ref, nextTick, reactive, watch, provide, inject } from "vue";
 import type { DataTableRowKey } from "naive-ui";
 import { NInput, useMessage } from "naive-ui";
 import ColumnF from "./component/columnFolder.vue";
@@ -106,8 +106,6 @@ const ShowOrEdit = defineComponent({
 			);
 	}
 });
-
-console.log("ShowOrEdit", ShowOrEdit);
 
 //表头
 const columns = [

@@ -162,26 +162,37 @@ export function setupHandleFile() {
 
 }
 
+
+//执行 命令行 命令
+function execCommindline(command) {
+    const child = exec(command, (error, stdout, stderr) => {
+        if (error) {
+            throw error;
+        }
+        console.log(stdout);
+    });
+    child.stdout.on("data", (data) => {
+        console.log(`stdout: ${data}`);
+    });
+    child.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+    });
+    child.on("close", (code) => {
+        console.log(`子进程退出，退出码 ${code}`);
+    });
+}
+
 //用vscode打开文件
 export function openFileWithVSCode() {
     ipcMain.on('openOnVscode', (event, filePath) => {
-        console.log('openOnVscode', filePath)
+        execCommindline(`code ${filePath}`)
+    })
+}
 
-        const child = exec(`code ${filePath}`, (error, stdout, stderr) => {
-            if (error) {
-                throw error;
-            }
-            console.log(stdout);
-        });
-        child.stdout.on("data", (data) => {
-            console.log(`stdout: ${data}`);
-        });
-        child.stderr.on("data", (data) => {
-            console.error(`stderr: ${data}`);
-        });
-        child.on("close", (code) => {
-            console.log(`子进程退出，退出码 ${code}`);
-        });
 
+//用文件管理器 打开文件夹
+export function openFileWithFolder() {
+    ipcMain.on('openOnFolder', (event, filePath) => {
+        execCommindline(`start ${filePath}`)
     })
 }

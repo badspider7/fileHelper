@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { useMessage, useDialog } from "naive-ui";
-import { ref, h } from "vue";
+import { ref, h, inject } from "vue";
 import fileApi from "@/api/fileApi";
 import useFileStore from "@/store/fileSystem";
 const store = useFileStore();
@@ -101,7 +101,7 @@ const handlerClickDeleteFile = (fileInfo) => {
 };
 //在文件夹打开选中的文件
 const handlerClickOpenOnFolder = (fileInfo) => {
-	console.log("打开文件夹", fileInfo);
+	fileApi.openOnFolder(fileInfo.filePath);
 };
 
 //用vscode打开选中的文件
@@ -110,7 +110,9 @@ const handlerClickOpenOnVscode = (fileInfo) => {
 };
 
 //添加备注
-const handlerClickAddBackup = (fileInfo) => {};
+const handlerClickAddBackup = (fileInfo) => {
+	// let res = inject("handleOnClick");
+};
 
 defineExpose({
 	showDropdown,

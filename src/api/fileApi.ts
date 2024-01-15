@@ -16,5 +16,8 @@ export default {
     },
     openOnVscode(filePath: string) {
         return window.ipcRenderer.send('openOnVscode', filePath);
+    },
+    openOnFolder(filePath: string) {
+        return window.ipcRenderer.send('openOnFolder', filePath);
     }
 }
