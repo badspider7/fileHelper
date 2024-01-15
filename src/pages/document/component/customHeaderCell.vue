@@ -2,10 +2,18 @@
 	<div class="custom_header_cell">
 		<div class="title">文件名</div>
 		<div class="btn">
-			<div class="up" :class="[activeArrow == 'up' ? 'on' : '']" @click="sortDocument('up')">
+			<div
+				class="up"
+				v-tooltip:top="'文件夹在前'"
+				:class="[activeArrow == 'up' ? 'on' : '']"
+				@click="sortDocument('up')">
 				<CaretSortUp />
 			</div>
-			<div class="down" :class="[activeArrow == 'down' ? 'on' : '']" @click="sortDocument('down')">
+			<div
+				class="down"
+				v-tooltip:top="'文件在前'"
+				:class="[activeArrow == 'down' ? 'on' : '']"
+				@click="sortDocument('down')">
 				<CaretSortDown />
 			</div>
 		</div>

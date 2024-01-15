@@ -13,5 +13,8 @@ export default {
     },
     getFileById(key: number) {
         return window.ipcRenderer.invoke('getFileById', key);
+    },
+    openOnVscode(filePath: string) {
+        return window.ipcRenderer.send('openOnVscode', filePath);
     }
 }

@@ -44,7 +44,7 @@ watch(
 const ShowOrEdit = defineComponent({
 	props: {
 		value: [String, Number],
-		onUpdateValue: [Function, Array<string>],
+		onUpdateValue: [Function],
 		rowInfo: {
 			type: Object as () => RowData
 		}

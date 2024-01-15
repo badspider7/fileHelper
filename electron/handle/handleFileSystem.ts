@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { ipcMain } from "electron";
 import fileListDB from '../db/fileList'
+import { exec } from 'child_process'
 
 //打开文件管理器
 /**
@@ -157,5 +158,30 @@ export function setupHandleFile() {
     ipcMain.handle('getFileById', (event, key) => {
         console.log('getFileById', key);
         return fileListDB.getFileById(key);
+    })
+
+}
+
+//用vscode打开文件
+export function openFileWithVSCode() {
+    ipcMain.on('openOnVscode', (event, filePath) => {
+        console.log('openOnVscode', filePath)
+
+        const child = exec(`code ${filePath}`, (error, stdout, stderr) => {
+            if (error) {
+                throw error;
+            }
+            console.log(stdout);
+        });
+        child.stdout.on("data", (data) => {
+            console.log(`stdout: ${data}`);
+        });
+        child.stderr.on("data", (data) => {
+            console.error(`stderr: ${data}`);
+        });
+        child.on("close", (code) => {
+            console.log(`子进程退出，退出码 ${code}`);
+        });
+
     })
 }

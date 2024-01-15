@@ -67,29 +67,50 @@ const onClickoutside = () => {
 };
 const handleSelect = (key: string) => {
 	showDropdown.value = false;
+	let fileInfo = JSON.parse(props.rowInfo);
 	if (key === "delete") {
-		let fileInfo = JSON.parse(props.rowInfo);
-		dialog.warning({
-			title: "警告",
-			// `确定删除文件${fileInfo.folderName}，删除后无法恢复`
-			content: () => h("div", ["确定删除文件", h("span", { style: { color: "#57B8AA" } }, fileInfo.folderName)]),
-			positiveText: "确定",
-			negativeText: "取消",
-			closeOnEsc: false,
-			maskClosable: false,
-			onPositiveClick: () => {
-				fileApi.deleteFile(JSON.parse(props.rowInfo).key);
-				store.getFileList();
-				message.success("删除成功");
-			},
-			onNegativeClick: () => {
-				message.warning("取消删除");
-			}
-		});
+		handlerClickDeleteFile(fileInfo);
 	} else if (key == "addBackup") {
-		//添加备注
+		handlerClickAddBackup(fileInfo);
+	} else if (key == "openWithFolder") {
+		handlerClickOpenOnFolder(fileInfo);
+	} else if (key == "openWithVscode") {
+		handlerClickOpenOnVscode(fileInfo);
 	}
 };
+
+//删除文件
+const handlerClickDeleteFile = (fileInfo) => {
+	dialog.warning({
+		title: "警告",
+		// `确定删除文件${fileInfo.folderName}，删除后无法恢复`
+		content: () => h("div", ["确定删除文件", h("span", { style: { color: "#57B8AA" } }, fileInfo.folderName)]),
+		positiveText: "确定",
+		negativeText: "取消",
+		closeOnEsc: false,
+		maskClosable: false,
+		onPositiveClick: () => {
+			fileApi.deleteFile(JSON.parse(props.rowInfo).key);
+			store.getFileList();
+			message.success("删除成功");
+		},
+		onNegativeClick: () => {
+			message.warning("取消删除");
+		}
+	});
+};
+//在文件夹打开选中的文件
+const handlerClickOpenOnFolder = (fileInfo) => {
+	console.log("打开文件夹", fileInfo);
+};
+
+//用vscode打开选中的文件
+const handlerClickOpenOnVscode = (fileInfo) => {
+	fileApi.openOnVscode(fileInfo.filePath);
+};
+
+//添加备注
+const handlerClickAddBackup = (fileInfo) => {};
 
 defineExpose({
 	showDropdown,

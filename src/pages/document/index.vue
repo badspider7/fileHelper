@@ -201,12 +201,23 @@ const folderUp = (files) => {
 //排序: 文件在前
 const fileUp = (files) => {};
 
-const sort = (type) => {
-	console.log("paixu", type);
+enum sortType {
+	up = "up",
+	down = "down"
+}
+/**
+ * @description 文件列表排序
+ * @param type up / down
+ * @returns {void}
+ */
+const sort = (type: sortType) => {
 	if (type == "up") {
-		store.fileList.value = folderUp(fileList);
-		console.log("store.fileList", store.fileList);
+		let forderFirst = folderUp(fileList);
+		store.fileList.value = forderFirst;
+		console.log("store.fileList", forderFirst);
 	} else {
+		//文件在前
+		// fileUp();
 	}
 };
 </script>
