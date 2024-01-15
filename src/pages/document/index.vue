@@ -158,7 +158,6 @@ const judgeFileExist = async (fileInfo) => {
 		}
 	}
 	return false;
-	// if(fileList.)
 };
 //添加文件
 const openFileExplorer = async (type: string) => {
@@ -169,7 +168,6 @@ const openFileExplorer = async (type: string) => {
 		message.error("文件已存在");
 		return;
 	}
-	console.log("1111", isFileExist);
 	if (fileInfo) {
 		iconName.value = "";
 		judgeFileCate(fileInfo);

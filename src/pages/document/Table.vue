@@ -95,6 +95,11 @@ const ShowOrEdit = defineComponent({
 									message.error("字数不能大于30个");
 								}
 							},
+							onKeyup: (e) => {
+								if (e.code === "Enter") {
+									handleChange();
+								}
+							},
 							onBlur: handleChange
 					  })
 					: props.value
@@ -120,7 +125,7 @@ const columns = [
 			});
 		},
 		render: (item) => {
-			return h(ColumnF, { folderName: item.folderName, category: item.category });
+			return h(ColumnF, { folderName: item.folderName, category: item.category, fileInfo: item });
 		}
 	},
 	{

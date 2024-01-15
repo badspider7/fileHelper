@@ -150,6 +150,7 @@ defineExpose({
 	color: #fff;
 	padding: 4px 10px;
 	border-radius: 5px;
+	z-index: 99;
 	#arrow {
 		position: absolute;
 		background: #222;
