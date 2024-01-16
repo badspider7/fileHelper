@@ -1,5 +1,5 @@
 <template>
-	<div class="slkeyer_bar">
+	<div class="sidebar_wrapper">
 		<n-menu :options="featureList" :value="checkedMenu" @update:value="handleUpdateValue" />
 	</div>
 </template>
@@ -148,7 +148,7 @@ const handleUpdateValue = (key: string) => {
 };
 </script>
 <style lang="scss" scoped>
-.slkeyer_bar {
+.sidebar_wrapper {
 	height: 100%;
 }
 </style>

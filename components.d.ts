@@ -28,6 +28,8 @@ declare module 'vue' {
     ProfilePanel: typeof import('./src/components/ProfilePanel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Search: typeof import('./src/components/search/index.vue')['default']
+    SearchResult: typeof import('./src/components/search/searchResult.vue')['default']
     SliderBar: typeof import('./src/components/layout/SliderBar.vue')['default']
     SvgIcon: typeof import('./src/components/SvgIcon.vue')['default']
   }

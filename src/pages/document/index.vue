@@ -151,6 +151,7 @@ const judgeFileCate = (fileInfo) => {
 const judgeFileExist = async (fileInfo) => {
 	//1.从数据库中拿到数据
 	let fileList = await fileApi.getAllFiles();
+	console.log("fileList", fileList);
 	//2.进行 名字和路径的比对
 	for (let item of fileList) {
 		if (item.folderName == fileInfo.name && item.filePath == fileInfo.path) {

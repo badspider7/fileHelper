@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import { computed, getCurrentInstance, nextTick, ref, useAttrs, watch } from "vue";
-const modules = import.meta.globEager("@/assets/icons/svg/*.svg", {
-	as: "component"
+const modules = import.meta.glob("@/assets/icons/svg/*.svg", {
+	as: "component",
+	eager: true
 });
 
 const props = withDefaults(defineProps<{ name: string }>(), {});

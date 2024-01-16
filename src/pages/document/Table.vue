@@ -40,6 +40,7 @@ watch(
 		console.log("table fileList changed", newVal);
 	}
 );
+
 //编辑备注
 const ShowOrEdit = defineComponent({
 	props: {
@@ -52,6 +53,7 @@ const ShowOrEdit = defineComponent({
 	setup(props) {
 		const isEdit = ref(false);
 		const inputRef = ref(null);
+
 		const inputValue = ref(props.value as string);
 		function handleOnClick() {
 			isEdit.value = true;
@@ -63,6 +65,7 @@ const ShowOrEdit = defineComponent({
 			props.onUpdateValue(inputValue.value);
 			let tempFileInfo: RowData = props.rowInfo;
 			const fileInfo = await fileApi.getFileById(tempFileInfo.key);
+
 			//判断 如果备注和原来的一样 则不修改
 			if (fileInfo.remarks === tempFileInfo.remarks) {
 				isEdit.value = false;
@@ -73,6 +76,7 @@ const ShowOrEdit = defineComponent({
 			message.success("修改成功", { duration: 1000 });
 			//TODO:更新数据
 		}
+
 		return () =>
 			h(
 				"div",
@@ -106,6 +110,8 @@ const ShowOrEdit = defineComponent({
 			);
 	}
 });
+
+console.log("ShowOrEdit", ShowOrEdit);
 
 //表头
 const columns = [

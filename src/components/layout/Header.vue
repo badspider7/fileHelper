@@ -10,9 +10,7 @@
 			</div>
 		</div>
 		<div class="middle">
-			<div class="search">
-				<n-input clearable v-model:value="value" type="text" placeholder="搜索项目(ctrl+k)" />
-			</div>
+			<search></search>
 		</div>
 		<div class="right">
 			<div class="controls">
@@ -41,6 +39,7 @@ import {
 	CopySelect20Regular
 } from "@vicons/fluent";
 import ProfilePanel from "../ProfilePanel.vue";
+import search from "../search/index.vue";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 const router = useRouter();
@@ -95,7 +94,6 @@ const showProfilePanel = throttle(() => {
 // 	// }
 // };
 
-const value = ref(null);
 const username = ref("badspider");
 
 //返回首页
@@ -158,20 +156,20 @@ const goHome = () => {
 		height: 100%;
 		margin-left: -10%;
 		-webkit-app-region: no-drag;
-		.search {
-			display: flex;
-			flex-flow: row nowrap;
-			width: 204px;
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			transition: all 0.2s ease;
-		}
+		// .search {
+		// 	display: flex;
+		// 	flex-flow: row nowrap;
+		// 	width: 204px;
+		// 	position: absolute;
+		// 	left: 50%;
+		// 	top: 50%;
+		// 	transform: translate(-50%, -50%);
+		// 	transition: all 0.2s ease;
+		// }
 
-		.search:has(div input:focus) {
-			width: 240px !important;
-		}
+		// .search:has(div input:focus) {
+		// 	width: 540px !important;
+		// }
 	}
 	.right {
 		.controls {

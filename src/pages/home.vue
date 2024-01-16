@@ -1,5 +1,5 @@
 <template>
-	<div>home</div>
+	<div style="background-color: #ccfcaa">home</div>
 </template>
 
 <script setup lang="ts"></script>
