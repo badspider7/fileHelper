@@ -156,6 +156,7 @@ const goHome = () => {
 		height: 100%;
 		margin-left: -10%;
 		-webkit-app-region: no-drag;
+		z-index: 9999;
 		// .search {
 		// 	display: flex;
 		// 	flex-flow: row nowrap;

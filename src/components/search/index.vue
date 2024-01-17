@@ -8,7 +8,7 @@
 			@blur="searchBlur"
 			@focus="searchFocus" />
 		<div class="result">
-			<search-result-panel v-show="isShowPanel"></search-result-panel>
+			<search-result-panel v-show="isShowPanel" ref="searchPanel"></search-result-panel>
 		</div>
 	</div>
 </template>
@@ -21,10 +21,16 @@ export default {
 
 <script setup lang="ts">
 import searchResultPanel from "./searchResult.vue";
-import { ref } from "vue";
+import { ref, watch, nextTick } from "vue";
 
 const searchValue = ref(null);
 const isShowPanel = ref(false);
+const searchPanel = ref(null);
+
+watch(searchValue, async (newVal, oldVal) => {
+	//调用everything 搜索文件资源管理器中的文件
+	searchPanel.value.search(newVal);
+});
 
 //search
 const searchBlur = () => {

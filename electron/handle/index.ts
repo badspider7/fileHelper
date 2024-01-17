@@ -2,6 +2,7 @@ import { setupTray } from './handleTray'
 import { setupTitleBarHandler, isMaximized } from './handleTitleBar'
 import { handleFileopen, setupHandleFile, openFileWithVSCode, openFileWithFolder } from './handleFileSystem'
 import { app, ipcMain, BrowserWindow } from "electron";
+import { searchInExplorer } from '../utils/util'
 
 
 export function setupHandle(win: BrowserWindow) {
@@ -10,7 +11,7 @@ export function setupHandle(win: BrowserWindow) {
     isMaximized(win);
     setupHandleFile();
     openFileWithVSCode();
-    openFileWithFolder()
+    openFileWithFolder();
     ipcMain.on('set-title', (event, title) => {
         const webContent = event.sender
         const win = BrowserWindow.fromWebContents(webContent);
@@ -19,5 +20,9 @@ export function setupHandle(win: BrowserWindow) {
 
     ipcMain.handle('fileSystem:openFile', (event, type) => {
         return handleFileopen(event, type)
+    })
+
+    ipcMain.handle('utils:searchInExplorer', (event, data) => {
+        return searchInExplorer(data)
     })
 }

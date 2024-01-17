@@ -1,5 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import sudo from 'sudo-prompt'
+import everythingNode from "everything-node";
+
 
 
 export function showMainWindow(route?: string | { name: string }) {
@@ -29,4 +31,14 @@ export function getPath(unpackPath: boolean = false) {
         return __dirname;
     }
     return unpackPath ? __dirname.replace("app.asar", "app.asar.unpacked") : __dirname;
+}
+
+
+
+export async function searchInExplorer(searchText: string): Promise<object[]> {
+    const _everything = new everythingNode();
+    _everything.limit(10);
+    _everything.addSearchText(searchText);
+    const data = await _everything.run();
+    return data;
 }
