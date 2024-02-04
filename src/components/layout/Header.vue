@@ -2,7 +2,7 @@
 	<div class="header">
 		<div class="left">
 			<div class="icon" @click="goHome">
-				<img src="/logo.svg" alt="" />
+				<img src="../../../public/logo.svg" alt="" />
 			</div>
 			<div class="username">{{ username }}</div>
 			<div class="pull_down" @click="showProfilePanel()">
@@ -156,7 +156,7 @@ const goHome = () => {
 		height: 100%;
 		margin-left: -10%;
 		-webkit-app-region: no-drag;
-		z-index: 9999;
+		z-index: 99;
 		// .search {
 		// 	display: flex;
 		// 	flex-flow: row nowrap;

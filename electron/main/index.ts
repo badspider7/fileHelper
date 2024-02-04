@@ -112,7 +112,8 @@ app.on('second-instance', () => {
     console.log('open second window')
     // Focus on the main window if the user tried to open another
     if (win.isMinimized()) win.restore()
-    win.focus()
+    win.focus();
+    win.show();
   }
 })
 
